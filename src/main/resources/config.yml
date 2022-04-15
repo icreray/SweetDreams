@@ -1,0 +1,9 @@
+maxSkipSpeedPerTick: 30
+nightCantBePassedMessage: "Никакой отдых не поможет пропустить эту ночь"
+playersNeededToSkipMessage: "Чтобы пропустить ночь, нужно чтобы легло еще %d игрок%s"
+sleepStatusMessage: "Спит %d из %d игроков | Время %s"
+goodMorningMessage: "Доброе утро, %s"
+noPermissionsMessage: "$cУ вас нет прав на использование данной комманды."
+expectedIntegerMessage: "$cНеверное целое число."
+gameruleIsNowSetToMessage: "Установленно значение игрового правила playersSleepingPercentage: %d"
+gameruleValueMessage: "Значение игрового правила playersSleepingPercentage: %d"

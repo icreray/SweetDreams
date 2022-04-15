@@ -1,0 +1,7 @@
+name: SweetDreams
+version: '${project.version}'
+main: com.creray.sweetdreams.SweetDreams
+api-version: 1.18
+prefix: SweetDreams
+authors: [ Creray ]
+description: Plugin for smooth night skipping
