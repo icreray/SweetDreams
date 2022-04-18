@@ -1,6 +1,6 @@
 package com.creray.sweetdreams.sleep.task;
 
-import com.creray.sweetdreams.sleep.SleepWorld;
+import com.creray.sweetdreams.sleep.world.SleepWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class PlayerCheckTask extends BukkitRunnable {
 
-    private final NightTickTask SLEEP_RUNNABLE;
+    private final NightSkipTasks SLEEP_RUNNABLE;
     private final SleepWorld WORLD;
     private final Set<Player> SLEEPING_PLAYERS;
 
 
-    public PlayerCheckTask(NightTickTask nightTickTask, SleepWorld world, Set<Player> sleepingPlayers) {
+    public PlayerCheckTask(NightSkipTasks nightTickTask, SleepWorld world, Set<Player> sleepingPlayers) {
         SLEEP_RUNNABLE = nightTickTask;
         WORLD = world;
         SLEEPING_PLAYERS = sleepingPlayers;

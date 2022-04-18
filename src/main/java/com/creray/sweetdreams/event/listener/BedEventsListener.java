@@ -1,6 +1,6 @@
 package com.creray.sweetdreams.event.listener;
 
-import com.creray.sweetdreams.sleep.SleepWorlds;
+import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

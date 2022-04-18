@@ -1,7 +1,8 @@
 package com.creray.sweetdreams.event.listener;
 
-import com.creray.sweetdreams.Config;
-import com.creray.sweetdreams.sleep.SleepWorlds;
+import com.creray.sweetdreams.config.Config;
+import com.creray.sweetdreams.sleep.world.SleepWorldData;
+import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.InvalidParameterException;
+import java.util.NoSuchElementException;
 
 public class GameruleCommandListener implements Listener {
 
@@ -45,11 +47,20 @@ public class GameruleCommandListener implements Listener {
     }
 
     private void execute(String[] command, Player player) {
+        SleepWorldData sleepWorldData;
+        try {
+            sleepWorldData = SLEEP_WORLDS.getSleepWorldData(player.getWorld());
+        }
+        catch (NoSuchElementException e) {
+            player.sendMessage(CONFIG.getThisIsNotSleepWorldMessage());
+            return;
+        }
+
         if (command.length == 2) {
             player.sendMessage(
                     String.format(
                             CONFIG.getGameruleValueMessage(),
-                            CONFIG.getPlayersSleepingPercentage(player.getWorld())
+                            sleepWorldData.getPlayersSleepingPercentage()
                     )
             );
             return;
@@ -63,7 +74,7 @@ public class GameruleCommandListener implements Listener {
             player.sendMessage(CONFIG.getExpectedIntegerMessage());
             return;
         }
-        CONFIG.setPlayersSleepingPercentage(player.getWorld(), playersSleepingPercentage);
+        sleepWorldData.setPlayersSleepingPercentage(playersSleepingPercentage);
         player.sendMessage(
                 String.format(CONFIG.getGameruleIsNowSetToMessage(), playersSleepingPercentage)
         );

@@ -1,6 +1,6 @@
-package com.creray.sweetdreams.sleep.task;
+package com.creray.sweetdreams.sleep.task.delayedmessage;
 
-import com.creray.sweetdreams.Config;
+import com.creray.sweetdreams.config.Config;
 import com.creray.sweetdreams.util.MessageUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

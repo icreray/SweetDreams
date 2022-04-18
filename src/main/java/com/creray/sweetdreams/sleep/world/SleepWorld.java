@@ -1,22 +1,24 @@
-package com.creray.sweetdreams.sleep;
+package com.creray.sweetdreams.sleep.world;
 
-import com.creray.sweetdreams.hook.EssentialsHook;
+import com.creray.sweetdreams.hook.essentials.IEssentialsHook;
 import com.creray.sweetdreams.util.TimeUtil;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.security.InvalidParameterException;
-import java.util.List;
+import java.util.logging.Logger;
 
 public class SleepWorld {
 
     private final World WORLD;
-    private final EssentialsHook ESSENTIALS_HOOK;
+    private final IEssentialsHook ESSENTIALS_HOOK;
+    private final Logger LOGGER;
 
-    public SleepWorld(World world, EssentialsHook essentialsHook) {
+    public SleepWorld(World world, IEssentialsHook essentialsHook, Logger logger) {
         WORLD = world;
         ESSENTIALS_HOOK = essentialsHook;
+        LOGGER = logger;
     }
 
     public World getWorld() {
@@ -25,10 +27,6 @@ public class SleepWorld {
 
     public long getTime() {
         return WORLD.getTime();
-    }
-
-    public List<Player> getAllPlayers() {
-        return WORLD.getPlayers();
     }
 
     public int getSleepCountedPlayersNumber() {
@@ -66,7 +64,16 @@ public class SleepWorld {
     }
 
     public void setRandomTickSpeed(int randomTickSpeed) {
+        setRandomTickSpeed(randomTickSpeed, false);
+    }
+
+    public void setRandomTickSpeed(int randomTickSpeed, boolean log) {
         WORLD.setGameRule(GameRule.RANDOM_TICK_SPEED, randomTickSpeed);
+        if (log) {
+            LOGGER.info(
+                    String.format("Changed '%s' world gamerule randomTickSpeed to %d.", WORLD.getName(), randomTickSpeed)
+            );
+        }
     }
 
     public void clearWeather() {

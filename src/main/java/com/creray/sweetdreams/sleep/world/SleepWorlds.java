@@ -1,7 +1,7 @@
-package com.creray.sweetdreams.sleep;
+package com.creray.sweetdreams.sleep.world;
 
-import com.creray.sweetdreams.Config;
-import com.creray.sweetdreams.hook.EssentialsHook;
+import com.creray.sweetdreams.config.Config;
+import com.creray.sweetdreams.hook.essentials.IEssentialsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -19,11 +19,11 @@ public class SleepWorlds {
     private final JavaPlugin PLUGIN;
     private final Config CONFIG;
 
-    private final EssentialsHook ESSENTIALS_HOOK;
+    private final IEssentialsHook ESSENTIALS_HOOK;
 
     private final Map<World, SleepWorldData> SLEEP_WORLDS;
 
-    public SleepWorlds(JavaPlugin plugin, Config config, Logger logger, EssentialsHook essentialsHook) {
+    public SleepWorlds(JavaPlugin plugin, Config config, Logger logger, IEssentialsHook essentialsHook) {
         PLUGIN = plugin;
         CONFIG = config;
         LOGGER = logger;
@@ -31,19 +31,8 @@ public class SleepWorlds {
         loadWorlds();
     }
 
-    public void forEach(Consumer<World> consumer) {
-        SLEEP_WORLDS.keySet().forEach(consumer);
-    }
-
-    public void setGameRules(World world) {
-        int playersSleepingPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
-        CONFIG.setPlayersSleepingPercentage(world, playersSleepingPercentage);
-        world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, 101);
-    }
-
-    public void resetGameRules(World world) {
-        int playersSleepingPercentage = CONFIG.getPlayersSleepingPercentage(world);
-        world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, playersSleepingPercentage);
+    public void forEach(Consumer<SleepWorldData> consumer) {
+        SLEEP_WORLDS.values().forEach(consumer);
     }
 
     public boolean contains(@NotNull World world) {
@@ -56,47 +45,27 @@ public class SleepWorlds {
             return;
         }
         if (world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE) == false) {
+            LOGGER.info(String.format("Failed to add '%s' world to sleep worlds, because world gamerule doDaylightCycle is false.", world.getName()));
             return;
         }
-        SleepWorldData sleepWorldData = new SleepWorldData(world, PLUGIN, CONFIG, ESSENTIALS_HOOK);
+        SleepWorldData sleepWorldData = new SleepWorldData(world, PLUGIN, LOGGER, CONFIG, ESSENTIALS_HOOK);
+        sleepWorldData.setGameRules();
         SLEEP_WORLDS.put(world, sleepWorldData);
-        setGameRules(world);
     }
 
     public void addSleepingPlayer(World world, Player player) {
         if (!this.contains(world)) {
             tryAddWorld(world);
         }
-        SleepWorldData sleepWorldData;
-        try {
-            sleepWorldData = getSleepWorldData(world);
-        }
-        catch (NoSuchElementException e) {
-            return;
-        }
-        sleepWorldData.addSleepingPlayer(player);
+        tryExecuteSleepWorldOperation(world, sleepWorldData -> sleepWorldData.addSleepingPlayer(player));
     }
 
     public void removeSleepingPlayer(World world, Player player) {
-        SleepWorldData sleepWorldData;
-        try {
-            sleepWorldData = getSleepWorldData(world);
-        }
-        catch (NoSuchElementException e) {
-            return;
-        }
-        sleepWorldData.removeSleepingPlayer(player);
+        tryExecuteSleepWorldOperation(world, sleepWorldData -> sleepWorldData.removeSleepingPlayer(player));
     }
 
     public void update(World world) {
-        SleepWorldData sleepWorldData;
-        try {
-            sleepWorldData = getSleepWorldData(world);
-        }
-        catch (NoSuchElementException e) {
-            return;
-        }
-        sleepWorldData.update();
+        tryExecuteSleepWorldOperation(world, SleepWorldData::update);
     }
 
     public void stopTasks() {
@@ -112,6 +81,17 @@ public class SleepWorlds {
             throw new NoSuchElementException();
         }
         return sleepWorldData;
+    }
+
+    private void tryExecuteSleepWorldOperation(World world, Consumer<SleepWorldData> consumer) {
+        SleepWorldData sleepWorldData;
+        try {
+            sleepWorldData = getSleepWorldData(world);
+        }
+        catch (NoSuchElementException e) {
+            return;
+        }
+        consumer.accept(sleepWorldData);
     }
 
     private void loadWorlds() {

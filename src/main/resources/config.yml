@@ -1,9 +1,12 @@
-maxSkipSpeedPerTick: 30
-nightCantBePassedMessage: "Никакой отдых не поможет пропустить эту ночь"
-playersNeededToSkipMessage: "Чтобы пропустить ночь, нужно чтобы легло еще %d игрок%s"
-sleepStatusMessage: "Спит %d из %d игроков | Время %s"
-goodMorningMessage: "Доброе утро, %s"
-noPermissionsMessage: "$cУ вас нет прав на использование данной комманды."
-expectedIntegerMessage: "$cНеверное целое число."
-gameruleIsNowSetToMessage: "Установленно значение игрового правила playersSleepingPercentage: %d"
-gameruleValueMessage: "Значение игрового правила playersSleepingPercentage: %d"
+maxSkipSpeedPerTick: 40
+nightCantBePassedMessage: Никакой отдых не поможет пропустить эту ночь
+playersNeededToSkipMessage: Чтобы пропустить ночь, нужно чтобы легло еще %d игрок%s
+sleepStatusMessage: §7Спит §r%d§7 из §r%d§7 игроков §8|§7 Время§r %s
+timePatternMessage: '%02d§8:§f%02d§7%s'
+goodMorningMessage: §7Доброе утро,§f %s
+thisIsNotSleepWorldMessage: Невозможно выполнить данную комманду в этом мире.
+noPermissionsMessage: $cУ вас нет прав на использование данной комманды.
+expectedIntegerMessage: $cНеверное целое число.
+gameruleIsNowSetToMessage: 'Установленно значение игрового правила playersSleepingPercentage:
+  %d'
+gameruleValueMessage: 'Значение игрового правила playersSleepingPercentage: %d'
