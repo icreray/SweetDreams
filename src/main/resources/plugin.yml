@@ -5,3 +5,10 @@ api-version: 1.18
 prefix: SweetDreams
 authors: [ Creray ]
 description: Plugin for smooth night skipping.
+softdepend: [ Essentials ]
+commands:
+  sweetdreams:
+    description: Введите '/sweetdreams help' для более подробной информации.
+    usage: /<command>
+    permission: sweetdreams.manageplugin
+    permission-message: §cУ вас нет прав на использование данной комманды.

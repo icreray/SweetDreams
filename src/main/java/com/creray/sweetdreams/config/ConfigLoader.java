@@ -42,13 +42,17 @@ public class ConfigLoader {
         FileConfiguration defaultConfiguration = loadResourceConfig();
         for (String optionName : Config.OPTION_NAMES) {
             if (!configuration.contains(optionName)) {
-                LOGGER.info("Invalid config, replaced it with default.");
-                configuration.setDefaults(defaultConfiguration);
-                defaultConfiguration.save(configFile);
+                replaceConfig(configuration, defaultConfiguration, configFile);
                 break;
             }
         }
         return new Config(configuration);
+    }
+
+    private void replaceConfig(FileConfiguration configuration, FileConfiguration defaultConfiguration, File configFile) throws IOException {
+        LOGGER.info("Invalid config, replaced it with default.");
+        configuration.setDefaults(defaultConfiguration);
+        defaultConfiguration.save(configFile);
     }
 
     private FileConfiguration loadResourceConfig() {

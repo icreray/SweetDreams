@@ -66,6 +66,10 @@ public class SleepWorldData {
         return defaultRandomTickSpeed;
     }
 
+    public String getWorldName() {
+        return SLEEP_WORLD.getWorld().getName();
+    }
+
     public void setPlayersSleepingPercentage(int playersSleepingPercentage) {
         defaultPlayersSleepingPercentage = playersSleepingPercentage;
     }

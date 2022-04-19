@@ -83,6 +83,10 @@ public class SleepWorlds {
         return sleepWorldData;
     }
 
+    public @NotNull Collection<SleepWorldData> getSleepWorldsData() {
+        return SLEEP_WORLDS.values();
+    }
+
     private void tryExecuteSleepWorldOperation(World world, Consumer<SleepWorldData> consumer) {
         SleepWorldData sleepWorldData;
         try {

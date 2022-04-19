@@ -20,16 +20,6 @@ public class Config {
     private final @NotNull String timePatternMessage;
     @Getter
     private final @NotNull String goodMorningMessage;
-    @Getter
-    private final @NotNull String thisIsNotSleepWorldMessage;
-    @Getter
-    private final @NotNull String noPermissionsMessage;
-    @Getter
-    private final @NotNull String expectedIntegerMessage;
-    @Getter
-    private final @NotNull String gameruleIsNowSetToMessage;
-    @Getter
-    private final @NotNull String gameruleValueMessage;
 
     public Config(FileConfiguration configuration) {
         maxSkipSpeedPerTick = configuration.getInt(OPTION_NAMES[0], 40);
@@ -38,11 +28,6 @@ public class Config {
         sleepStatusMessage = configuration.getString(OPTION_NAMES[3], "§7Спит §r%d§7 из §r%d§7 игроков §8|§7 Время§r %s");
         timePatternMessage = configuration.getString(OPTION_NAMES[4], "%02d§8:§f%02d§7%s");
         goodMorningMessage = configuration.getString(OPTION_NAMES[5], "§7Доброе утро,§f %s");
-        thisIsNotSleepWorldMessage = configuration.getString(OPTION_NAMES[6], "Невозможно выполнить данную комманду в этом мире.");
-        noPermissionsMessage = configuration.getString(OPTION_NAMES[7], "&cУ вас нет прав на использование данной комманды.");
-        expectedIntegerMessage = configuration.getString(OPTION_NAMES[8], "&cНеверное целое число.");
-        gameruleIsNowSetToMessage = configuration.getString(OPTION_NAMES[9], "Установленно значение игрового правила playersSleepingPercentage: %d");
-        gameruleValueMessage = configuration.getString(OPTION_NAMES[10], "Значение игрового правила playersSleepingPercentage: %d");
     }
 
     public String getPlayersNeedToSkipMessage(int playersRemain) {
@@ -69,12 +54,7 @@ public class Config {
                 "playersNeededToSkipMessage",
                 "sleepStatusMessage",
                 "timePatternMessage",
-                "goodMorningMessage",
-                "thisIsNotSleepWorldMessage",
-                "noPermissionsMessage",
-                "expectedIntegerMessage",
-                "gameruleIsNowSetToMessage",
-                "gameruleValueMessage"
+                "goodMorningMessage"
         };
     }
 }
