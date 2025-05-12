@@ -1,5 +1,5 @@
 name: SweetDreams
-version: '${project.version}'
+version: '${version}'
 main: com.creray.sweetdreams.SweetDreams
 api-version: 1.18
 prefix: SweetDreams
