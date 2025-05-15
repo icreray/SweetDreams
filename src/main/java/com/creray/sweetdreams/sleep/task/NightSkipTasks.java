@@ -1,45 +1,39 @@
 package com.creray.sweetdreams.sleep.task;
 
-import com.creray.sweetdreams.config.Config;
+import com.creray.sweetdreams.SweetDreams;
 import com.creray.sweetdreams.event.NightSkippedEvent;
 import com.creray.sweetdreams.sleep.world.SleepWorld;
 import com.creray.sweetdreams.sleep.task.delayedmessage.NightCantBePassedMessageTask;
 import com.creray.sweetdreams.sleep.task.delayedmessage.PlayersNeededMessageTask;
 import com.creray.sweetdreams.sleep.world.SleepWorldData;
-import com.creray.sweetdreams.util.MessageUtil;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import com.creray.sweetdreams.util.Message;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.creray.sweetdreams.SweetDreams.CONFIG;
+
 public class NightSkipTasks implements Runnable {
 
-    private final JavaPlugin PLUGIN;
-    private final PluginManager PLUGIN_MANAGER;
-    private final Config CONFIG;
+    private final JavaPlugin PLUGIN = SweetDreams.getPlugin();
     private final SleepWorldData SLEEP_WORLD_DATA;
     private final SleepWorld SLEEP_WORLD;
-    private final Set<Player> SLEEPING_PLAYERS;
-    private final BukkitScheduler SCHEDULER;
+    private final Set<Player> SLEEPING_PLAYERS = new HashSet<>();
 
     private BukkitTask task;
     private PlayerCheckTask playerCheckTask;
 
-    private boolean isSkipping;
-    private int skipSpeed;
+    private boolean isSkipping = false;
+    private int skipSpeed = 0;
     private int playersNeedToSleepTotal;
     private int playersRemainingToSkip;
 
-    public NightSkipTasks(JavaPlugin plugin, Config config, SleepWorldData sleepWorldData, SleepWorld world) {
-        CONFIG = config;
-        PLUGIN = plugin;
+    public NightSkipTasks(SleepWorldData sleepWorldData, SleepWorld world) {
         SLEEP_WORLD_DATA = sleepWorldData;
         SLEEP_WORLD = world;
     }
@@ -53,14 +47,14 @@ public class NightSkipTasks implements Runnable {
         recalculateValues();
         int playersNeeded = playersRemainingToSkip - SLEEPING_PLAYERS.size();
         if (SLEEP_WORLD_DATA.getPlayersSleepingPercentage() > 100) {
-            NightCantBePassedMessageTask nightCantBePassedMessageTask = new NightCantBePassedMessageTask(SLEEPING_PLAYERS, CONFIG);
+            NightCantBePassedMessageTask nightCantBePassedMessageTask = new NightCantBePassedMessageTask(SLEEPING_PLAYERS);
             nightCantBePassedMessageTask.runTaskLater(PLUGIN, 1L);
         }
         else if (playersNeeded <= 0) {
             runTasks();
         }
         else  {
-            PlayersNeededMessageTask playersNeededMessageTask = new PlayersNeededMessageTask(SLEEPING_PLAYERS, CONFIG, playersNeeded);
+            PlayersNeededMessageTask playersNeededMessageTask = new PlayersNeededMessageTask(SLEEPING_PLAYERS, playersNeeded);
             playersNeededMessageTask.runTaskLater(PLUGIN, 1L);
         }
     }
@@ -97,7 +91,7 @@ public class NightSkipTasks implements Runnable {
         boolean isNextDay = SLEEP_WORLD.addTime(skipSpeed);
         sendSleepStatusMessage();
         if (isNextDay) {
-            PLUGIN_MANAGER.callEvent(new NightSkippedEvent(SLEEP_WORLD.getWorld(), SLEEPING_PLAYERS));
+            Bukkit.getPluginManager().callEvent(new NightSkippedEvent(SLEEP_WORLD.getWorld(), SLEEPING_PLAYERS));
             SLEEP_WORLD.clearWeather();
             resetSleepingPlayers();
         }
@@ -105,21 +99,16 @@ public class NightSkipTasks implements Runnable {
 
     private void sendSleepStatusMessage() {
         long worldTime = SLEEP_WORLD.getTime();
-        BaseComponent[] component = TextComponent.fromLegacyText(
-                CONFIG.getSleepStatusMessage(
-                        SLEEPING_PLAYERS.size(),
-                        playersNeedToSleepTotal,
-                        worldTime
-                )
-        );
-        SLEEPING_PLAYERS.forEach(player ->
-            MessageUtil.sendActionBar(player, component)
-        );
+
+        SLEEPING_PLAYERS.forEach(player -> {
+            Component message = Message.sleepStatus(player, SLEEPING_PLAYERS.size(), playersNeedToSleepTotal, worldTime);
+            player.sendActionBar(message);
+        });
     }
 
     private void runTasks() {
         if (!isSkipping) {
-            task = SCHEDULER.runTaskTimer(PLUGIN, this, 1L, 1L);
+            task = Bukkit.getScheduler().runTaskTimer(PLUGIN, this, 1L, 1L);
             playerCheckTask = new PlayerCheckTask(this, SLEEP_WORLD, SLEEPING_PLAYERS);
             playerCheckTask.runTaskTimer(PLUGIN, 2L, 20L);
             isSkipping = true;
@@ -133,14 +122,5 @@ public class NightSkipTasks implements Runnable {
             SLEEP_WORLD.setRandomTickSpeed(SLEEP_WORLD_DATA.getDefaultRandomTickSpeed());
             isSkipping = false;
         }
-    }
-
-    {
-        PLUGIN_MANAGER = Bukkit.getPluginManager();
-        SLEEPING_PLAYERS = new HashSet<>();
-        SCHEDULER = Bukkit.getScheduler();
-
-        isSkipping = false;
-        skipSpeed = 0;
     }
 }

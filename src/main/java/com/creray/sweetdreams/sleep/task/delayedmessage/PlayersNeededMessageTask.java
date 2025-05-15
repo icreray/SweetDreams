@@ -1,7 +1,7 @@
 package com.creray.sweetdreams.sleep.task.delayedmessage;
 
-import com.creray.sweetdreams.config.Config;
-import com.creray.sweetdreams.util.MessageUtil;
+import com.creray.sweetdreams.util.Message;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -10,19 +10,20 @@ import java.util.Set;
 public class PlayersNeededMessageTask extends BukkitRunnable {
 
     private final Set<Player> PLAYERS;
-    private final Config CONFIG;
     private final int PLAYERS_NEEDED;
 
-    public PlayersNeededMessageTask(Set<Player> players, Config config, int playersNeeded) {
+    public PlayersNeededMessageTask(Set<Player> players, int playersNeeded) {
         PLAYERS = players;
-        CONFIG = config;
         PLAYERS_NEEDED = playersNeeded;
     }
 
     @Override
     public void run() {
-        for (Player player : PLAYERS) {
-            MessageUtil.sendActionBar(player, CONFIG.getPlayersNeedToSkipMessage(PLAYERS_NEEDED));
-        }
+        PLAYERS.forEach(this::sendPlayersNeedToSkipMessage);
+    }
+
+    private void sendPlayersNeedToSkipMessage(Player player) {
+        Component message = Message.playersNeededToSkip(player, PLAYERS_NEEDED);
+        player.sendActionBar(message);
     }
 }

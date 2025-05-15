@@ -1,5 +1,6 @@
 package com.creray.sweetdreams.config;
 
+import com.creray.sweetdreams.SweetDreams;
 import com.google.common.base.Charsets;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,19 +11,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
+
+import static com.creray.sweetdreams.SweetDreams.LOGGER;
 
 public class ConfigLoader {
 
     private static final String FILENAME = "config.yml";
 
-    private final JavaPlugin PLUGIN;
-    private final Logger LOGGER;
-
-    public ConfigLoader(JavaPlugin plugin, Logger logger) {
-        PLUGIN = plugin;
-        LOGGER = logger;
-    }
+    private final JavaPlugin PLUGIN = SweetDreams.getPlugin();
 
     public @NotNull Config tryLoadConfig() {
         File configFile = new File(PLUGIN.getDataFolder(), FILENAME);
@@ -32,7 +28,7 @@ public class ConfigLoader {
         }
         catch (IOException e) {
             FileConfiguration emptyConfiguration = new YamlConfiguration();
-            LOGGER.warning("Unable to load config.");
+            LOGGER.warn("Unable to load config.");
             return new Config(emptyConfiguration);
         }
     }

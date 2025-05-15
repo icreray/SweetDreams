@@ -1,7 +1,6 @@
 package com.creray.sweetdreams.command;
 
 import com.creray.sweetdreams.sleep.world.SleepWorldData;
-import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -12,17 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
+
+import static com.creray.sweetdreams.SweetDreams.LOGGER;
+import static com.creray.sweetdreams.SweetDreams.SLEEP_WORLDS;
 
 public class SweetDreamsMainCommandExecutor implements CommandExecutor {
-
-    private final SleepWorlds SLEEP_WORLDS;
-    private final Logger LOGGER;
-
-    public SweetDreamsMainCommandExecutor(SleepWorlds sleepWorlds, Logger logger) {
-        SLEEP_WORLDS = sleepWorlds;
-        LOGGER = logger;
-    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -80,8 +73,7 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
     }
 
     private void getPlayersSleepingPercentage(CommandSender sender) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
             getPlayersSleepingPercentage(sender, player.getWorld().getName());
             return;
         }
@@ -105,11 +97,10 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
     }
 
     private void setPlayersSleepingPercentage(CommandSender sender, String value) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("§сПроизошла ошибка при выполнении комманды: укажите мир к которому будет применяться новое значение.");
             return;
         }
-        Player player = (Player) sender;
         setPlayersSleepingPercentage(sender, value, player.getWorld().getName());
 
     }
@@ -125,7 +116,7 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
             }
             sleepWorldData.setPlayersSleepingPercentage(playersSleepingPercentage);
             sender.sendMessage("Установленно новое значение playersSleepingPercentage для мира '" + worldName + "': " + playersSleepingPercentage);
-            LOGGER.info("Set new playersSleepingPercentage value for '" + worldName + "' world: " + playersSleepingPercentage);
+            LOGGER.info("Set new playersSleepingPercentage value for '{}' world: {}", worldName, playersSleepingPercentage);
         };
         sleepWorldOperation(sender, worldName, consumer);
     }

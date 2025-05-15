@@ -1,21 +1,15 @@
 package com.creray.sweetdreams.event.listener;
 
-import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
+
+import static com.creray.sweetdreams.SweetDreams.SLEEP_WORLDS;
 
 public class PlayerUpdatesListeners implements Listener {
-
-    private final SleepWorlds SLEEP_WORLDS;
-
-    public PlayerUpdatesListeners(@NotNull SleepWorlds sleepWorlds) {
-        SLEEP_WORLDS = sleepWorlds;
-    }
 
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) {

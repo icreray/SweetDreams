@@ -16,10 +16,15 @@ repositories {
         name = "ess-repo"
         url = "https://repo.essentialsx.net/releases"
     }
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io/"
+    }
 }
 
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT'
+    implementation 'com.github.placeholderapi:placeholderapi:2.11.6'
     compileOnly 'org.projectlombok:lombok:1.18.38'
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
 

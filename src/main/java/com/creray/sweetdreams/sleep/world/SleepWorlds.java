@@ -1,32 +1,24 @@
 package com.creray.sweetdreams.sleep.world;
 
-import com.creray.sweetdreams.config.Config;
 import com.creray.sweetdreams.hook.essentials.IEssentialsHook;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
+
+import static com.creray.sweetdreams.SweetDreams.LOGGER;
 
 public class SleepWorlds {
-
-    private final Logger LOGGER;
-    private final JavaPlugin PLUGIN;
-    private final Config CONFIG;
 
     private final IEssentialsHook ESSENTIALS_HOOK;
 
     private final Map<World, SleepWorldData> SLEEP_WORLDS;
 
-    public SleepWorlds(JavaPlugin plugin, Config config, Logger logger, IEssentialsHook essentialsHook) {
-        PLUGIN = plugin;
-        CONFIG = config;
-        LOGGER = logger;
+    public SleepWorlds(IEssentialsHook essentialsHook) {
         ESSENTIALS_HOOK = essentialsHook;
         loadWorlds();
     }
@@ -41,14 +33,14 @@ public class SleepWorlds {
 
     public void tryAddWorld(World world) {
         if (world.getEnvironment() != World.Environment.NORMAL) {
-            LOGGER.info(String.format("Failed to add '%s' world to sleep worlds, because world environment isn't NORMAL.", world.getName()));
+            LOGGER.info("Failed to add '{}' world to sleep worlds, because world environment isn't NORMAL.", world.getName());
             return;
         }
         if (world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE) == false) {
-            LOGGER.info(String.format("Failed to add '%s' world to sleep worlds, because world gamerule doDaylightCycle is false.", world.getName()));
+            LOGGER.info("Failed to add '{}' world to sleep worlds, because world gamerule doDaylightCycle is false.", world.getName());
             return;
         }
-        SleepWorldData sleepWorldData = new SleepWorldData(world, PLUGIN, LOGGER, CONFIG, ESSENTIALS_HOOK);
+        SleepWorldData sleepWorldData = new SleepWorldData(world, ESSENTIALS_HOOK);
         sleepWorldData.setGameRules();
         SLEEP_WORLDS.put(world, sleepWorldData);
     }

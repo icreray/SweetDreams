@@ -3,9 +3,11 @@ version: '${version}'
 main: com.creray.sweetdreams.SweetDreams
 api-version: 1.18
 prefix: SweetDreams
-authors: [ Creray ]
+authors: [ Creray, belkinPNG ]
 description: Plugin for smooth night skipping.
-softdepend: [ Essentials ]
+softdepend:
+  - Essentials
+  - PlaceholderAPI
 commands:
   sweetdreams:
     description: Введите '/sweetdreams help' для более подробной информации.

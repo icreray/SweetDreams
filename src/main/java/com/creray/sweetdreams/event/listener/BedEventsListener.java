@@ -1,24 +1,15 @@
 package com.creray.sweetdreams.event.listener;
 
-import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.security.InvalidParameterException;
-
+import static com.creray.sweetdreams.SweetDreams.SLEEP_WORLDS;
 import static org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
 public class BedEventsListener implements Listener {
-
-    private final SleepWorlds SLEEP_WORLDS;
-
-    public BedEventsListener(@NotNull SleepWorlds sleepWorlds) throws InvalidParameterException {
-        SLEEP_WORLDS = sleepWorlds;
-    }
 
     @EventHandler
     private void onPlayerBedEnter(PlayerBedEnterEvent event) {

@@ -7,18 +7,17 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.security.InvalidParameterException;
-import java.util.logging.Logger;
+
+import static com.creray.sweetdreams.SweetDreams.LOGGER;
 
 public class SleepWorld {
 
     private final World WORLD;
     private final IEssentialsHook ESSENTIALS_HOOK;
-    private final Logger LOGGER;
 
-    public SleepWorld(World world, IEssentialsHook essentialsHook, Logger logger) {
+    public SleepWorld(World world, IEssentialsHook essentialsHook) {
         WORLD = world;
         ESSENTIALS_HOOK = essentialsHook;
-        LOGGER = logger;
     }
 
     public World getWorld() {
@@ -70,9 +69,7 @@ public class SleepWorld {
     public void setRandomTickSpeed(int randomTickSpeed, boolean log) {
         WORLD.setGameRule(GameRule.RANDOM_TICK_SPEED, randomTickSpeed);
         if (log) {
-            LOGGER.info(
-                    String.format("Changed '%s' world gamerule randomTickSpeed to %d.", WORLD.getName(), randomTickSpeed)
-            );
+            LOGGER.info("Changed '{}' world gamerule randomTickSpeed to {}.", WORLD.getName(), randomTickSpeed);
         }
     }
 

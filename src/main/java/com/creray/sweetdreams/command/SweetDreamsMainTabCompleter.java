@@ -1,7 +1,6 @@
 package com.creray.sweetdreams.command;
 
 import com.creray.sweetdreams.sleep.world.SleepWorldData;
-import com.creray.sweetdreams.sleep.world.SleepWorlds;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -11,13 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.creray.sweetdreams.SweetDreams.SLEEP_WORLDS;
+
 public class SweetDreamsMainTabCompleter implements TabCompleter {
-
-    private final SleepWorlds SLEEP_WORLDS;
-
-    public SweetDreamsMainTabCompleter(SleepWorlds sleepWorlds) {
-        SLEEP_WORLDS = sleepWorlds;
-    }
 
     @Nullable
     @Override

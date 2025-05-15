@@ -1,6 +1,20 @@
+# Maximum randomTickSpeed that the plugin will be able to set
 maxSkipSpeedPerTick: 40
-nightCantBePassedMessage: Никакой отдых не поможет пропустить эту ночь
-playersNeededToSkipMessage: Чтобы пропустить ночь, нужно чтобы легло еще %d игрок%s
-sleepStatusMessage: §7Спит §r%d§7 из §r%d§7 игроков §8|§7 Время§r %s
-timePatternMessage: '%02d§8:§f%02d§7%s'
-goodMorningMessage: §7Доброе утро,§f %s
+
+# In all messages below you can use PlaceholderAPI placeholders.
+# <papi:placeholder> - PlaceholderAPI placeholder referring to the player to whom this message was sent
+
+# Message displayed if plugin can't skip night due to thunder/internal error
+nightCantBePassedMessage: "Никакой отдых не поможет пропустить эту ночь"
+
+# <players_remaining> - amount a players needed to skip the night
+playersNeededToSkipMessage: "Чтобы пропустить ночь, нужно чтобы легло ещё <players_remaining> игрок(ов)"
+
+# <players_sleeping> - amount of sleeping players
+# <players_remaining> - amount a players needed to skip the night
+# <hour>, <minute> - in game time.
+# <postfix> - AM/PM postfix
+sleepStatusMessage: "<gray>Спит</gray> <players_sleeping> <gray>из</gray> <players_remaining> <gray>игроков <dark_gray>| <gray>Время <reset><hour><gray>:<white><minute><gray><postfix>"
+
+# <player_name> - player name
+goodMorningMessage: "<gray>Доброе утро,<white> <player_name>"
