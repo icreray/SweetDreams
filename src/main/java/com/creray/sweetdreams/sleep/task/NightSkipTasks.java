@@ -46,7 +46,7 @@ public class NightSkipTasks implements Runnable {
         SLEEPING_PLAYERS.add(player);
         recalculateValues();
         int playersNeeded = playersRemainingToSkip - SLEEPING_PLAYERS.size();
-        if (SLEEP_WORLD_DATA.getPlayersSleepingPercentage() > 100) {
+        if (skipThunderDenied() || SLEEP_WORLD_DATA.getPlayersSleepingPercentage() > 100) {
             NightCantBePassedMessageTask nightCantBePassedMessageTask = new NightCantBePassedMessageTask(SLEEPING_PLAYERS);
             nightCantBePassedMessageTask.runTaskLater(PLUGIN, 1L);
         }
@@ -122,5 +122,9 @@ public class NightSkipTasks implements Runnable {
             SLEEP_WORLD.setRandomTickSpeed(SLEEP_WORLD_DATA.getDefaultRandomTickSpeed());
             isSkipping = false;
         }
+    }
+
+    private boolean skipThunderDenied() {
+        return SLEEP_WORLD.getWorld().isThundering() && !CONFIG.isShouldSkipThunder();
     }
 }

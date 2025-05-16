@@ -7,6 +7,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Config {
 
     private final int maxSkipSpeedPerTick;
+    private final boolean shouldSkipThunder;
+    private final int minimumWeatherClearTime;
+    private final int maximumWeatherClearTime;
 
     private final String configReloadMessage;
     private final String nightCantBePassedMessage;
@@ -16,6 +19,9 @@ public class Config {
 
     public Config(YamlConfiguration configuration) {
         maxSkipSpeedPerTick = configuration.getInt("max-skip-speed", 40);
+        shouldSkipThunder = configuration.getBoolean("should-skip-thunder", true);
+        minimumWeatherClearTime = configuration.getInt("minimum-clear-time", 12000);
+        maximumWeatherClearTime = configuration.getInt("maximum-clear-time", 12000);
 
         configReloadMessage = configuration.getString("message.config-reload");
         nightCantBePassedMessage = configuration.getString("message.night-skipping.night-cant-be-passed");

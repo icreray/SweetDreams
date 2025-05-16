@@ -1,6 +1,12 @@
 # Maximum randomTickSpeed that the plugin will be able to set
 max-skip-speed: 40
 
+should-skip-thunder: true
+# After skipping night, the plugin will choose a random number of ticks between the minimum and maximum value at which the game cannot attempt to spawn rain/thunder
+minimum-clear-time: 12000
+maximum-clear-time: 180000
+
+
 # In all messages below you can use PlaceholderAPI placeholders.
 # <papi:placeholder> - PlaceholderAPI placeholder referring to the player to whom this message was sent
 message:

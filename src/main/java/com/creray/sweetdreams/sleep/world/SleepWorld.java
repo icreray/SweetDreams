@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.security.InvalidParameterException;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.creray.sweetdreams.SweetDreams.LOGGER;
 
@@ -74,7 +75,7 @@ public class SleepWorld {
     }
 
     public void clearWeather() {
-        WORLD.setStorm(false);
-        WORLD.setThundering(false);
+        int duration = ThreadLocalRandom.current().nextInt(12000,180000);
+        WORLD.setClearWeatherDuration(duration);
     }
 }
