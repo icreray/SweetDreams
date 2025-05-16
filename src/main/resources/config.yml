@@ -1,20 +1,24 @@
 # Maximum randomTickSpeed that the plugin will be able to set
-maxSkipSpeedPerTick: 40
+max-skip-speed: 40
 
 # In all messages below you can use PlaceholderAPI placeholders.
 # <papi:placeholder> - PlaceholderAPI placeholder referring to the player to whom this message was sent
+message:
+  # Message displayed via /sweetdreams reload
+  config-reload: "Configuration file successfully reloaded"
 
-# Message displayed if plugin can't skip night due to thunder/internal error
-nightCantBePassedMessage: "Никакой отдых не поможет пропустить эту ночь"
+  night-skipping:
+    # Message displayed if plugin can't skip night due to thunder/internal error
+    night-cant-be-passed: "Никакой отдых не поможет пропустить эту ночь"
 
-# <players_remaining> - amount a players needed to skip the night
-playersNeededToSkipMessage: "Чтобы пропустить ночь, нужно чтобы легло ещё <players_remaining> игрок(ов)"
+    # <players_remaining> - amount a players needed to skip the night
+    players-needed-to-skip: "Чтобы пропустить ночь, нужно чтобы легло ещё <players_remaining> игрок(ов)"
 
-# <players_sleeping> - amount of sleeping players
-# <players_remaining> - amount a players needed to skip the night
-# <hour>, <minute> - in game time.
-# <postfix> - AM/PM postfix
-sleepStatusMessage: "<gray>Спит</gray> <players_sleeping> <gray>из</gray> <players_remaining> <gray>игроков <dark_gray>| <gray>Время <reset><hour><gray>:<white><minute><gray><postfix>"
+    # <players_sleeping> - amount of sleeping players
+    # <players_remaining> - amount a players needed to skip the night
+    # <hour>, <minute> - in game time.
+    # <postfix> - AM/PM postfix
+    sleep-status: "<gray>Спит</gray> <players_sleeping> <gray>из</gray> <players_remaining> <gray>игроков <dark_gray>| <gray>Время <reset><hour><gray>:<white><minute><gray><postfix>"
 
-# <player_name> - player name
-goodMorningMessage: "<gray>Доброе утро,<white> <player_name>"
+    # <player_name> - player name
+    good-morning: "<gray>Доброе утро,<white> <player_name>"

@@ -1,19 +1,23 @@
 package com.creray.sweetdreams.command;
 
+import com.creray.sweetdreams.config.ConfigLoadResult;
+import com.creray.sweetdreams.config.ConfigLoader;
 import com.creray.sweetdreams.sleep.world.SleepWorldData;
+import com.creray.sweetdreams.util.Message;
+import com.creray.sweetdreams.util.minimessage.MiniMessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-import static com.creray.sweetdreams.SweetDreams.LOGGER;
-import static com.creray.sweetdreams.SweetDreams.SLEEP_WORLDS;
+import static com.creray.sweetdreams.SweetDreams.*;
 
 public class SweetDreamsMainCommandExecutor implements CommandExecutor {
 
@@ -29,6 +33,10 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
         if (args.length == 1) {
             if (args[0].equals("help")) {
                 sendHelpMessage(sender);
+                return true;
+            }
+            if (args[0].equals("reload")) {
+                reloadConfig(sender);
                 return true;
             }
             return false;
@@ -61,6 +69,7 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
                 setPlayersSleepingPercentage(sender, args[2], args[3]);
             }
         }
+
         return false;
     }
 
@@ -70,6 +79,25 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
                 "§r/sweetdreams playersSleepingPercentage get [world_name]§7: Узнать минимальный процент игроков, необходимый для пропуска ночи.\n" +
                 "§r/sweetdreams playersSleepingPercentage set <value> [world_name]§7: Установить минимальный процент игроков, необходимый для пропуска ночи.\n\n";
         sender.sendMessage(helpMessage);
+    }
+
+    private void reloadConfig(CommandSender sender) {
+        ConfigLoadResult result = ConfigLoader.loadConfig();
+
+        if (result.isSuccessLoaded()) {
+            CONFIG = result.getConfig();
+            sender.sendMessage(Message.getConfigReloadMessage());
+        } else {
+            var exception = result.getException();
+            ConfigLoader.logConfigErrors(exception);
+
+            if (sender instanceof ConsoleCommandSender) return;
+            sender.sendMessage(
+                    new MiniMessageBuilder("<red>An error is occurred while loading config file, check console for details.\nError message: <gray><message>")
+                            .setUnparsedPlaceholder("message", exception.getMessage())
+                            .build()
+            );
+        }
     }
 
     private void getPlayersSleepingPercentage(CommandSender sender) {

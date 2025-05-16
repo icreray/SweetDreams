@@ -3,6 +3,7 @@ package com.creray.sweetdreams;
 import com.creray.sweetdreams.command.SweetDreamsMainCommandExecutor;
 import com.creray.sweetdreams.command.SweetDreamsMainTabCompleter;
 import com.creray.sweetdreams.config.Config;
+import com.creray.sweetdreams.config.ConfigLoadResult;
 import com.creray.sweetdreams.config.ConfigLoader;
 import com.creray.sweetdreams.event.listener.BedEventsListener;
 import com.creray.sweetdreams.event.listener.NightSkippedListener;
@@ -35,7 +36,7 @@ public final class SweetDreams extends JavaPlugin {
         plugin = this;
         LOGGER = getSLF4JLogger();
         MiniMessageBuilder.checkPapiAvailability();
-        CONFIG = new ConfigLoader().tryLoadConfig();
+        loadConfig();
         IEssentialsHook essentialsHook = IEssentialsHook.getHook(PLUGIN_MANAGER);
         SLEEP_WORLDS = new SleepWorlds(essentialsHook);
         registerEvents();
@@ -67,5 +68,14 @@ public final class SweetDreams extends JavaPlugin {
         }
         command.setExecutor(executor);
         command.setTabCompleter(tabCompleter);
+    }
+
+    private void loadConfig() {
+        ConfigLoadResult result = ConfigLoader.loadConfig();
+        CONFIG = result.getConfig();
+        if (!result.isSuccessLoaded()) {
+            var exception = result.getException();
+            ConfigLoader.logConfigErrors(exception);
+        }
     }
 }

@@ -8,6 +8,10 @@ import static com.creray.sweetdreams.SweetDreams.CONFIG;
 import static com.creray.sweetdreams.util.minimessage.Placeholders.*;
 
 public class Message {
+    public static Component getConfigReloadMessage() {
+        return new MiniMessageBuilder(CONFIG.getConfigReloadMessage()).build();
+    }
+
     public static Component playersNeededToSkip(Player player, int playersRemain) {
         return new MiniMessageBuilder(CONFIG.getPlayersNeededToSkipMessage())
                 .setPlaceholder(PLAYERS_REMAINING.key(), String.valueOf(playersRemain))
