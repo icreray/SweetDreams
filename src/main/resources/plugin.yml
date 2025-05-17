@@ -10,7 +10,6 @@ softdepend:
   - PlaceholderAPI
 commands:
   sweetdreams:
-    description: Введите '/sweetdreams help' для более подробной информации.
+    description: /sweetdreams [reload/playerSleepingPercentage]
     usage: /<command>
     permission: sweetdreams.manageplugin
-    permission-message: §cУ вас нет прав на использование данной комманды.

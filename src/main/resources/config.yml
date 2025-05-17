@@ -6,25 +6,37 @@ should-skip-thunder: true
 minimum-clear-time: 12000
 maximum-clear-time: 180000
 
-
-# In all messages below you can use PlaceholderAPI placeholders.
-# <papi:placeholder> - PlaceholderAPI placeholder referring to the player to whom this message was sent
 message:
   # Message displayed via /sweetdreams reload
   config-reload: "Configuration file successfully reloaded"
+  wrong-command: "Too few arguments!"
 
+  sleepingpercentage:
+    usage: "<red>/sweetdreams playerSleepingPercentage [get/set] [world_name] <amount>"
+    get: "Sleeping percentage for <world_name>: <percentage>"
+    set: "Set sleeping percentage for <world_name>: <percentage>"
+    # Displayed if argument don't contain integer number
+    non-integer: "<red>Value must be an integer"
+    # Displayed if world not found
+    cant-find-world: "<red>World <world_name> not found"
+    provide-world-name: "<red>Provide world name"
+    # Displayed if world environment isn't NORMAL
+    wrong-world: "<red><world_name> is not a good place to sleep"
+
+  # In all messages below you can use PlaceholderAPI placeholders.
+  # <papi:placeholder> - PlaceholderAPI placeholder referring to the player to whom this message was sent
   night-skipping:
     # Message displayed if plugin can't skip night due to thunder/internal error
-    night-cant-be-passed: "Никакой отдых не поможет пропустить эту ночь"
+    night-cant-be-passed: "No amount of rest can pass this night"
 
     # <players_remaining> - amount a players needed to skip the night
-    players-needed-to-skip: "Чтобы пропустить ночь, нужно чтобы легло ещё <players_remaining> игрок(ов)"
+    players-needed-to-skip: "<players_remaining> player(s) needed to skip the night"
 
     # <players_sleeping> - amount of sleeping players
     # <players_remaining> - amount a players needed to skip the night
     # <hour>, <minute> - in game time.
     # <postfix> - AM/PM postfix
-    sleep-status: "<gray>Спит</gray> <players_sleeping> <gray>из</gray> <players_remaining> <gray>игроков <dark_gray>| <gray>Время <reset><hour><gray>:<white><minute><gray><postfix>"
+    sleep-status: "<gray>Sleeping</gray> <players_sleeping> <gray>of</gray> <players_remaining> <gray>players <dark_gray> <gray>Time: <reset><hour><gray>:<white><minute><gray> <postfix>"
 
     # <player_name> - player name
-    good-morning: "<gray>Доброе утро,<white> <player_name>"
+    good-morning: "<gray>Good morning,<white> <player_name>"

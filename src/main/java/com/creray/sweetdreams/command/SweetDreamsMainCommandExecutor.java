@@ -23,65 +23,18 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!onCommand(sender, args)) {
-            sender.sendMessage("§cНеверная или неполная комманда, введите '/sweetdreams help' для подсказки.");
+        if (args.length >= 1) {
+            switch (args[0]) {
+                case "reload" -> runReloadConfigCommand(sender);
+                case "playersSleepingPercentage" -> runSleepingPercentageCommand(sender, args);
+            }
+        } else {
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getWrongCommandMessage()).build());
         }
         return true;
     }
 
-    private boolean onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            if (args[0].equals("help")) {
-                sendHelpMessage(sender);
-                return true;
-            }
-            if (args[0].equals("reload")) {
-                reloadConfig(sender);
-                return true;
-            }
-            return false;
-        }
-        if (args.length == 2) {
-            if (args[0].equals("playersSleepingPercentage")) {
-                if (args[1].equals("get")) {
-                    getPlayersSleepingPercentage(sender);
-                    return true;
-                }
-            }
-            return false;
-        }
-        if (args.length == 3) {
-            if (args[0].equals("playersSleepingPercentage")) {
-                if (args[1].equals("get")) {
-                    getPlayersSleepingPercentage(sender, args[2]);
-                    return true;
-                }
-                if (args[1].equals("set")) {
-                    setPlayersSleepingPercentage(sender, args[2]);
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-        if (args.length == 4) {
-            if (args[0].equals("playersSleepingPercentage") && args[1].equals("set")) {
-                setPlayersSleepingPercentage(sender, args[2], args[3]);
-            }
-        }
-
-        return false;
-    }
-
-    private void sendHelpMessage(CommandSender sender) {
-        String helpMessage =
-                "\n/sweetdreams help§7: Подробная информация об подкоммандах.\n" +
-                "§r/sweetdreams playersSleepingPercentage get [world_name]§7: Узнать минимальный процент игроков, необходимый для пропуска ночи.\n" +
-                "§r/sweetdreams playersSleepingPercentage set <value> [world_name]§7: Установить минимальный процент игроков, необходимый для пропуска ночи.\n\n";
-        sender.sendMessage(helpMessage);
-    }
-
-    private void reloadConfig(CommandSender sender) {
+    private void runReloadConfigCommand(CommandSender sender) {
         ConfigLoadResult result = ConfigLoader.loadConfig();
 
         if (result.isSuccessLoaded()) {
@@ -92,11 +45,39 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
             ConfigLoader.logConfigErrors(exception);
 
             if (sender instanceof ConsoleCommandSender) return;
-            sender.sendMessage(
-                    new MiniMessageBuilder("<red>An error is occurred while loading config file, check console for details.\nError message: <gray><message>")
-                            .setUnparsedPlaceholder("message", exception.getMessage())
-                            .build()
+            sender.sendMessage(new MiniMessageBuilder("<red>An error is occurred while loading config file, check console for details.\nError message: <gray><message>")
+                    .setUnparsedPlaceholder("message", exception.getMessage())
+                    .build()
             );
+        }
+    }
+
+    private void runSleepingPercentageCommand(CommandSender sender, String[] args) {
+        if (args.length >= 2) {
+            switch (args[1]) {
+                case "get" -> getPlayersSleepingPercentage(sender, args);
+                case "set" -> setPlayersSleepingPercentage(sender, args);
+            }
+        } else {
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getPercentageUsageMessage()).build());
+        }
+    }
+
+    private void getPlayersSleepingPercentage(CommandSender sender, String[] args) {
+        if (args.length == 2) {
+            getPlayersSleepingPercentage(sender);
+        } else {
+            getPlayersSleepingPercentage(sender, args[2]);
+        }
+    }
+
+    private void setPlayersSleepingPercentage(CommandSender sender, String[] args) {
+        if (args.length == 3) {
+            setPlayersSleepingPercentage(sender, args[2]);
+        } else if (args.length > 3) {
+            setPlayersSleepingPercentage(sender, args[2], args[3]);
+        } else {
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getPercentageUsageMessage()).build());
         }
     }
 
@@ -105,32 +86,29 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
             getPlayersSleepingPercentage(sender, player.getWorld().getName());
             return;
         }
-        StringBuilder message = new StringBuilder("\n");
-        for (SleepWorldData sleepWorldData : SLEEP_WORLDS.getSleepWorldsData()) {
-            message.append("Значение playersSleepingPercentage для мира '")
-                    .append(sleepWorldData.getWorldName())
-                    .append("': ")
-                    .append(sleepWorldData.getPlayersSleepingPercentage())
-                    .append("\n");
-        }
-        sender.sendMessage(message.toString());
+
+        sender.sendMessage(new MiniMessageBuilder(CONFIG.getProvideWorldMessage()).build());
     }
 
     private void getPlayersSleepingPercentage(CommandSender sender, String worldName) {
         Consumer<SleepWorldData> consumer = (sleepWorldData) -> {
             int playersSleepingPercentage = sleepWorldData.getPlayersSleepingPercentage();
-            sender.sendMessage("Значение playersSleepingPercentage для мира '" + worldName + "': " + playersSleepingPercentage);
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getPercentageGetMessage())
+                    .setPlaceholder("world_name", worldName)
+                    .setPlaceholder("percentage", playersSleepingPercentage)
+                    .build()
+            );
         };
         sleepWorldOperation(sender, worldName, consumer);
     }
 
     private void setPlayersSleepingPercentage(CommandSender sender, String value) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("§сПроизошла ошибка при выполнении комманды: укажите мир к которому будет применяться новое значение.");
+        if (sender instanceof Player player) {
+            setPlayersSleepingPercentage(sender, value, player.getWorld().getName());
             return;
         }
-        setPlayersSleepingPercentage(sender, value, player.getWorld().getName());
 
+        sender.sendMessage(new MiniMessageBuilder(CONFIG.getProvideWorldMessage()).build());
     }
 
     private void setPlayersSleepingPercentage(CommandSender sender, String value, String worldName) {
@@ -139,11 +117,15 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
             try {
                 playersSleepingPercentage = Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                sender.sendMessage("§cНеверное целове число.");
+                sender.sendMessage(new MiniMessageBuilder(CONFIG.getNonIntegerMessage()).build());
                 return;
             }
             sleepWorldData.setPlayersSleepingPercentage(playersSleepingPercentage);
-            sender.sendMessage("Установленно новое значение playersSleepingPercentage для мира '" + worldName + "': " + playersSleepingPercentage);
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getPercentageSetMessage())
+                    .setPlaceholder("world_name", worldName)
+                    .setPlaceholder("percentage", playersSleepingPercentage)
+                    .build()
+            );
             LOGGER.info("Set new playersSleepingPercentage value for '{}' world: {}", worldName, playersSleepingPercentage);
         };
         sleepWorldOperation(sender, worldName, consumer);
@@ -152,7 +134,10 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
     private void sleepWorldOperation(CommandSender sender, String worldName, Consumer<SleepWorldData> consumer) {
         World world = Bukkit.getWorld(worldName);
         if (world == null) {
-            sender.sendMessage("§cПроизошла ошибка при выполнении комманды: не удалось найти мир '" + worldName + "'.");
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getWorldNotFoundMessage())
+                    .setPlaceholder("world_name", worldName)
+                    .build()
+            );
             return;
         }
         SleepWorldData sleepWorldData;
@@ -160,7 +145,10 @@ public class SweetDreamsMainCommandExecutor implements CommandExecutor {
             sleepWorldData = SLEEP_WORLDS.getSleepWorldData(world);
         }
         catch (NoSuchElementException e) {
-            sender.sendMessage("§cПроизошла ошибка при выполнении комманды: мир '" + worldName + "' не является подходящим местом для сна.");
+            sender.sendMessage(new MiniMessageBuilder(CONFIG.getWrongWorldMessage())
+                    .setPlaceholder("world_name", worldName)
+                    .build()
+            );
             return;
         }
         consumer.accept(sleepWorldData);

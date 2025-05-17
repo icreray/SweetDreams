@@ -19,7 +19,7 @@ public class SweetDreamsMainTabCompleter implements TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            completions.add("help");
+            completions.add("reload");
             completions.add("playersSleepingPercentage");
             return completions;
         }
