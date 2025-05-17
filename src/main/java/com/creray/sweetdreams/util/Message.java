@@ -30,7 +30,8 @@ public class Message {
             postfix = "PM";
         }
 
-        int minute = (int) ((worldTime % 1000) / 100F * 6);
+        int minuteRaw = (int) ((worldTime % 1000) / 100F * 6);
+        String minute = String.format("%02d", minuteRaw);
         return new MiniMessageBuilder(CONFIG.getSleepStatusMessage())
                 .setPlaceholder(PLAYERS_SLEEPING.key(), playersSleeping)
                 .setPlaceholder(PLAYERS_REMAINING.key(), playersRemainTotal)
